@@ -1,1 +1,6 @@
-
+Assessment Name,Job Level,Skills,Duration (mins),Remote Testing,Adaptive Support
+Cognitive Ability Test,Entry Level,"logical reasoning, problem solving, numerical ability",30,Yes,Yes
+Technical Skills Test,Mid Level,"programming, debugging, system design",45,Yes,No
+Leadership Assessment,Senior Level,"leadership, decision making, strategic thinking",60,Yes,Yes
+Personality Questionnaire,All Levels,"communication, teamwork, adaptability",25,Yes,No
+Situational Judgement Test,Mid Level,"decision making, workplace behavior",35,Yes,No
