@@ -8,11 +8,10 @@ st.title("SHL Assessment Recommendation Engine")
 st.write("Enter job role or required skills to get recommended assessments.")
 
 user_input = st.text_input("Enter Job Role or Skills")
-
-if user_input:
-    results = recommend_assessments(user_input)
-
+results = recommend_assessments(user_input)
+ if results:
     st.subheader("Top Recommended Assessments")
-    st.dataframe(results)
-
-    st.success("Recommendations generated successfully!")
+    for url in results:
+        st.write(url)
+else:
+    st.warning("No matching assessments found.")
