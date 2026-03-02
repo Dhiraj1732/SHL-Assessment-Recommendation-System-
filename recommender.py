@@ -1,28 +1,27 @@
 import pandas as pd
+import torch
+from sentence_transformers import SentenceTransformer, util
 
 df = pd.read_csv("shl_assessments.csv")
-
-# Clean column names (VERY IMPORTANT)
 df.columns = df.columns.str.strip()
 
+model = SentenceTransformer("all-MiniLM-L6-v2")
+
+# Precompute embeddings once
+query_embeddings = model.encode(df["Query"].tolist(), convert_to_tensor=True)
+
 def recommend_assessments(user_input):
-    if "Query" not in df.columns or "Assessment_url" not in df.columns:
+    if not user_input.strip():
         return []
 
-    user_input = user_input.lower().split()
-    scored_results = []
+    user_embedding = model.encode(user_input, convert_to_tensor=True)
 
-    for _, row in df.iterrows():
-        query_text = str(row["Query"]).lower()
-        score = 0
+    similarities = util.cos_sim(user_embedding, query_embeddings)[0]
 
-        for word in user_input:
-            if word in query_text:
-                score += 1
+    top_k = torch.topk(similarities, k=3)
 
-        if score > 0:
-            scored_results.append((score, row["Assessment_url"]))
+    results = []
+    for score, idx in zip(top_k.values, top_k.indices):
+        results.append(df.iloc[idx]["Assessment_url"])
 
-    scored_results.sort(reverse=True)
-
-    return [url for _, url in scored_results[:3]]
+    return results
