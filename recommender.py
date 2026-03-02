@@ -2,7 +2,13 @@ import pandas as pd
 
 df = pd.read_csv("shl_assessments.csv")
 
+# Clean column names (VERY IMPORTANT)
+df.columns = df.columns.str.strip()
+
 def recommend_assessments(user_input):
+    if "Query" not in df.columns or "Assessment_url" not in df.columns:
+        return []
+
     user_input = user_input.lower().split()
     scored_results = []
 
@@ -17,8 +23,6 @@ def recommend_assessments(user_input):
         if score > 0:
             scored_results.append((score, row["Assessment_url"]))
 
-    # Sort by score descending
     scored_results.sort(reverse=True)
 
-    # Return top 3
     return [url for _, url in scored_results[:3]]
